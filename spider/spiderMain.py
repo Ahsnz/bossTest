@@ -81,6 +81,44 @@ class spider(object):
                 salary = list(map(lambda x: int(x), salaries[0].replace('元/天', '').split('-')))
                 salarymonth = '0薪'
 
+            companyTitle = job.find_element(by=By.XPATH,
+                                            value=".//div[@class='job-card-right']/div[@class='company-info']/h3/a").text
+            companyAvatar = job.find_element(by=By.XPATH,
+                                             value=".//div[@class='job-card-right']/div[@class='company-logo']/a/img").get_attribute(
+                "src")
+            companyInfos = job.find_elements(by=By.XPATH,
+                                             value=".//div[@class='job-card-right']/div[@class='company-info']/ul[@class='company-tag-list']/li")
+            if len(companyInfos) == 3:
+                companyNature = companyInfos[0].text
+                companyStatus = companyInfos[1].text
+                companyPeoples = companyInfos[2].text
+                if companyPeoples != '10000人以上':
+                    companyPeople = list(map(lambda x: int(x), companyInfos[2].text.replace('人', '').split('-')))
+                else:
+                    companyPeople = [0, 10000]
+            else:
+                companyNature = companyInfos[0].text
+                companyStatus = '未来融资'
+                companyPeoples = companyInfos[1].text
+                if companyPeoples != '10000人以上':
+                    companyPeople = list(map(lambda x: int(x), companyInfos[1].text.replace('人', '').split('-')))
+                else:
+                    companyPeople = [0, 10000]
+
+            companyTags = job.find_element(by=By.XPATH,
+                                           value="./div[contains(@class,'job-card-footer')]/div[@class='info-desc']").text
+            if not companyTags:
+                companyTags = '无'
+            else:
+                companyTags = json.dumps(companyTags.split(','))
+
+            detailUrl = job.find_element(by=By.XPATH, value=".//a[@class='job-card-left']").get_attribute('href')
+            companyUrl = job.find_element(by=By.XPATH,
+                                          value=".//div[@class='job-card-right']/div[@class='company-info']/h3/a").get_attribute(
+                'href')
+            print(companyTitle, companyAvatar, companyNature, companyStatus, companyPeople, companyTags, detailUrl,
+                  companyUrl)
+
     def init(self):
         if not os.path.exists('./temp.csv'):
             with open('./temp.csv', 'a', newline='', encoding='utf-8') as wf:

@@ -16,6 +16,8 @@ class spider(object):
     def startBrower(self):
         service = Service('./chromedriver.exe')
         options = webdriver.ChromeOptions()
+        #boss反爬,复用浏览器
+        # options.add_experimental_option('debuaggerAddress', 'localhost:9222')
         # 告诉浏览器不是测试环境
         options.add_experimental_option('excludeSwitches', ['enable-automation'])
         brower = webdriver.Chrome(service=service, options=options)

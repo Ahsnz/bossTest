@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver import Chrome
+from webdriver_manager.chrome import ChromeDriverManager
 import csv
 import os
 import time
@@ -14,7 +16,8 @@ class spider(object):
         self.spiderUrl = 'https://www.zhipin.com/c101010100/?query=%s&city=100010000&page=%s'
 
     def startBrower(self):
-        service = Service('./chromedriver.exe')
+        # service = Service('./chromedriver.exe')
+        service=Service(ChromeDriverManager().install())
         options = webdriver.ChromeOptions()
         #boss反爬,复用浏览器
         # options.add_experimental_option('debuaggerAddress', 'localhost:9222')
